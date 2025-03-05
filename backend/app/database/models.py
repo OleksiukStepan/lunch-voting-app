@@ -1,4 +1,13 @@
-from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, Date
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Numeric,
+    ForeignKey,
+    Date,
+    func,
+)
+from sqlalchemy.orm import relationship
 
 from backend.app.database.session import Base
 
@@ -34,9 +43,10 @@ class Menu(Base):
     dish = Column(String(255), unique=True, nullable=False)
     description = Column(String)
     price = Column(Numeric(10, 2), nullable=False)
-    date = Column(Date)
-
+    date = Column(Date, default=func.current_date())
     restaurant_id = Column(Integer, ForeignKey("restaurants.id"), nullable=False)
+
+    restaurants = relationship("Restaurant", back_populates="menu")
 
 
 class Vote(Base):
@@ -45,3 +55,7 @@ class Vote(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     menu_id = Column(Integer, ForeignKey("menu.id"), nullable=False)
+    created_at = Column(Date, default=func.current_date())
+
+    users = relationship("User", back_populates="votes")
+    menus = relationship("Menu", back_populates="votes")
