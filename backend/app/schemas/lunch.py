@@ -17,7 +17,7 @@ class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
+class UserSchema(UserBase):
     id: int
     fullname: Optional[str] = None
 
@@ -34,7 +34,7 @@ class RestaurantCreate(RestaurantBase):
     pass
 
 
-class Restaurant(RestaurantBase):
+class RestaurantSchema(RestaurantBase):
     id: int
 
     class Config:
@@ -45,14 +45,14 @@ class MenuBase(BaseModel):
     dish: str
     description: Optional[str] = None
     price: float
-    date: Optional[date] = None
+    date: date
 
 
 class MenuCreate(MenuBase):
     restaurant_id: int
 
 
-class Menu(MenuBase):
+class MenuSchema(MenuBase):
     id: int
     restaurant_id: int
 
@@ -63,13 +63,14 @@ class Menu(MenuBase):
 class VoteBase(BaseModel):
     user_id: int
     menu_id: int
+    created_at: date
 
 
 class VoteCreate(VoteBase):
     pass
 
 
-class Vote(VoteBase):
+class VoteSchema(VoteBase):
     id: int
 
     class Config:
