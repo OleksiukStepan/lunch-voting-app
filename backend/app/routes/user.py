@@ -8,14 +8,14 @@ from backend.app.schemas.user import UserCreate, UserSchema
 router = APIRouter()
 
 
-@router.post("/users/", response_model=UserCreate)
-def create_employee(employee: UserCreate, db: Session = Depends(get_db)):
-    new_user = User(**employee.model_dump())
+@router.post("/", response_model=UserCreate)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    new_user = User(**user.model_dump())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
 
-@router.get("/users/", response_model=UserSchema)
-def get_all_employees(db: Session = Depends(get_db)):
+@router.get("/", response_model=UserSchema)
+def get_all_users(db: Session = Depends(get_db)):
     return db.query(User).all()

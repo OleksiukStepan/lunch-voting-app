@@ -10,7 +10,7 @@ from backend.app.schemas.menu import MenuCreate, MenuSchema
 router = APIRouter()
 
 
-@router.post("/menus/", response_model=MenuCreate)
+@router.post("/", response_model=MenuCreate)
 def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
     new_menu = Menu(**menu.model_dump())
     db.add(new_menu)
@@ -19,12 +19,12 @@ def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
     return new_menu
 
 
-@router.get("/menus/", response_model=MenuSchema)
+@router.get("/", response_model=MenuSchema)
 def get_all_menus(db: Session = Depends(get_db)):
     return db.query(Menu).all()
 
 
-@router.get("/menus/today/", response_model=MenuSchema)
+@router.get("/today/", response_model=MenuSchema)
 def get_today_menu(db: Session = Depends(get_db)):
     menu = db.query(Menu).filter(Menu.date == date.today())
 

@@ -10,7 +10,7 @@ from backend.app.schemas.vote import VoteSchema
 router = APIRouter()
 
 
-@router.get("/votes/", response_model=VoteSchema)
+@router.get("/", response_model=VoteSchema)
 def get_today_votes(db: Session = Depends(get_db)):
     votes = (
         db.query(Menu, Vote).join(Vote, Vote.menu_id == Menu.id)
@@ -19,7 +19,7 @@ def get_today_votes(db: Session = Depends(get_db)):
     return votes
 
 
-@router.post("/vote")
+@router.post("/")
 def vote_for_menu(user_id: int, menu_id: int, db: Session = Depends(get_db)):
     existing_vote = db.query(Vote).filter(
         Vote.user_id == user_id, Vote.menu_id == menu_id
