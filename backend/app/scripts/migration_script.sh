@@ -14,5 +14,3 @@ echo "Starting database migration..."
 alembic revision --autogenerate
 alembic upgrade head
 echo "Database migration completed successfully."
-
-# docker-compose run --rm migrator
