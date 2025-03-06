@@ -15,5 +15,6 @@ COPY . .
 
 COPY backend/app/scripts/entrypoint.sh /entrypoint.sh
 COPY backend/app/scripts/migration_script.sh /migration_script.sh
+
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /migration_script.sh
