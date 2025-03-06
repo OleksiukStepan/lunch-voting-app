@@ -16,15 +16,16 @@ def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
     db.add(new_menu)
     db.commit()
     db.refresh(new_menu)
+
     return new_menu
 
 
-@router.get("/", response_model=MenuSchema)
+@router.get("/", response_model=list[MenuSchema])
 def get_all_menus(db: Session = Depends(get_db)):
     return db.query(Menu).all()
 
 
-@router.get("/today/", response_model=MenuSchema)
+@router.get("/today/", response_model=list[MenuSchema])
 def get_today_menu(db: Session = Depends(get_db)):
     menu = db.query(Menu).filter(Menu.date == date.today())
 
