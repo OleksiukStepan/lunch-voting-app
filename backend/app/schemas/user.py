@@ -4,8 +4,6 @@ from pydantic import BaseModel
 
 
 class UserBase(BaseModel):
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
     username: str
 
     class Config:
@@ -13,6 +11,8 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
+    firstname: str
+    lastname: str
     password: str
 
 
@@ -22,3 +22,12 @@ class UserSchema(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserLogin(UserBase):
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
