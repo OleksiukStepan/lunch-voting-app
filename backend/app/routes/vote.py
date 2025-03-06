@@ -1,34 +1,52 @@
 from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from backend.app.database.models import Vote, Menu
 from backend.app.database.session import get_db
-from backend.app.schemas.vote import VoteSchema
+from backend.app.schemas.menu import MenuSchema
+from backend.app.schemas.vote import VoteSchema, VoteCreate
 
 router = APIRouter()
 
 
-@router.get("/", response_model=VoteSchema)
+@router.get("/", response_model=list[VoteSchema])
 def get_today_votes(db: Session = Depends(get_db)):
-    votes = (
-        db.query(Menu, Vote).join(Vote, Vote.menu_id == Menu.id)
-        .filter(Menu.date == date.today()).all()
-    )
+    votes = db.query(Vote).filter(Vote.created_at == date.today()).all()
+
+    for vote in votes:
+        vote.menu = db.query(Menu).filter(Menu.id == vote.menu_id).first()
+
     return votes
 
 
-@router.post("/")
-def vote_for_menu(user_id: int, menu_id: int, db: Session = Depends(get_db)):
-    existing_vote = db.query(Vote).filter(
-        Vote.user_id == user_id, Vote.menu_id == menu_id
+@router.post("/", response_model=VoteCreate)
+def vote_for_menu(vote_data: VoteCreate, db: Session = Depends(get_db)):
+    vote = db.query(Vote).filter(
+        Vote.user_id == vote_data.user_id, Vote.menu_id == vote_data.menu_id
     ).first()
 
-    if existing_vote:
+    if vote:
         raise HTTPException(status_code=400, detail="User has already voted")
 
-    vote = Vote(user_id=user_id, menu_id=menu_id)
+    vote = Vote(user_id=vote_data.user_id, menu_id=vote_data.menu_id)
     db.add(vote)
     db.commit()
+    db.refresh(vote)
+
     return vote
+
+
+@router.get("/results/", response_model=list[list])
+def get_voting_results(db: Session = Depends(get_db)):
+    results = (
+        db.query(Menu.dish, func.count(Vote.id))
+        .join(Vote, Menu.id == Vote.menu_id)
+        .filter(Vote.created_at == date.today())
+        .group_by(Menu.dish)
+        .all()
+    )
+
+    return results
