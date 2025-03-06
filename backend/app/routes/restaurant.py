@@ -7,15 +7,17 @@ from backend.app.schemas.restaurant import RestaurantCreate, RestaurantBase
 
 router = APIRouter()
 
+
 @router.post("/", response_model=RestaurantCreate)
 def create_restaurant(restaurant: RestaurantCreate, db: Session = Depends(get_db)):
     new_restaurant = Restaurant(name=restaurant.name)
     db.add(new_restaurant)
     db.commit()
     db.refresh(new_restaurant)
+
     return new_restaurant
 
 
-@router.get("/", response_model=RestaurantBase)
+@router.get("/", response_model=list[RestaurantBase])
 def get_all_restaurants(db: Session = Depends(get_db)):
     return db.query(Restaurant).all()
