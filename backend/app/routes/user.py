@@ -14,8 +14,9 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
     return new_user
 
-@router.get("/", response_model=UserSchema)
+@router.get("/", response_model=list[UserSchema])
 def get_all_users(db: Session = Depends(get_db)):
     return db.query(User).all()
