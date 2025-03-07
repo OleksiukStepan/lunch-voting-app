@@ -13,6 +13,8 @@ from backend.app.database.session import Base
 
 
 class User(Base):
+    """Represents a user with authentication details and voting history"""
+
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -25,6 +27,8 @@ class User(Base):
 
     @property
     def fullname(self):
+        """Returns the user's full name"""
+
         if self.firstname and self.lastname:
             return f"{self.firstname} {self.lastname}"
 
@@ -32,6 +36,8 @@ class User(Base):
 
 
 class Restaurant(Base):
+    """Represents a restaurant with a unique name and associated menus"""
+
     __tablename__ = "restaurants"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -41,6 +47,7 @@ class Restaurant(Base):
 
 
 class Menu(Base):
+    """Represents a menu item with dish details, price, and restaurant association"""
     __tablename__ = "menus"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -55,6 +62,8 @@ class Menu(Base):
 
 
 class Vote(Base):
+    """Represents a user's vote for a menu item"""
+
     __tablename__ = "votes"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
