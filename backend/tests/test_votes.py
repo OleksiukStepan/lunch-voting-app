@@ -20,7 +20,6 @@ def test_get_today_votes(client, setup_test_data):
     assert isinstance(response.json(), list)
 
 
-
 def test_get_voting_results(client, setup_test_data):
     headers = setup_test_data["headers"]
 

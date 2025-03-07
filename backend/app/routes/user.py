@@ -8,7 +8,7 @@ from backend.app.schemas.user import UserCreate, UserSchema
 router = APIRouter()
 
 
-@router.post("/", response_model=UserCreate)
+@router.post("/", response_model=UserSchema)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     """Creates a new user with the provided details"""
 
@@ -18,6 +18,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     return new_user
+
 
 @router.get("/", response_model=list[UserSchema])
 def get_all_users(db: Session = Depends(get_db)):

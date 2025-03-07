@@ -14,6 +14,7 @@ SessionLocal = sessionmaker(bind=engine)
 
 Base = declarative_base()
 
+
 def get_db() -> Session:
     """Provides a database session and ensures it is closed after use"""
     db = SessionLocal()

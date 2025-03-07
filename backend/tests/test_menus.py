@@ -12,10 +12,12 @@ def test_create_menu(client, setup_test_data):
     assert response.status_code == 200
     assert response.json()["dish"] == "Test Unique Dish"
 
+
 def test_get_menus(client):
     response = client.get("/menus/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
 
 def test_get_today_menu(client):
     response = client.get("/menus/today/")

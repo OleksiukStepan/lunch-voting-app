@@ -10,7 +10,7 @@ from backend.app.schemas.menu import MenuCreate, MenuSchema
 router = APIRouter()
 
 
-@router.post("/", response_model=MenuCreate)
+@router.post("/", response_model=MenuSchema)
 def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
     """Creates a new menu for a restaurant"""
 

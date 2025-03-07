@@ -24,8 +24,12 @@ def get_today_votes(current_user: User = Depends(get_current_user), db: Session 
     return votes
 
 
-@router.post("/", response_model=VoteCreate)
-def vote_for_menu(vote_data: VoteCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+@router.post("/", response_model=VoteSchema)
+def vote_for_menu(
+        vote_data: VoteCreate,
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+):
     """Allows a user to vote for a menu item. Each user can vote only once per day"""
 
     vote = db.query(Vote).filter(
@@ -35,7 +39,12 @@ def vote_for_menu(vote_data: VoteCreate, current_user: User = Depends(get_curren
     if vote:
         raise HTTPException(status_code=400, detail="User has already voted")
 
+    menu = db.query(Menu).filter(Menu.id == vote_data.menu_id).first()
+    if not menu:
+        raise HTTPException(status_code=404, detail="Menu not found")
+
     vote = Vote(user_id=vote_data.user_id, menu_id=vote_data.menu_id)
+    vote.menu = menu
     db.add(vote)
     db.commit()
     db.refresh(vote)

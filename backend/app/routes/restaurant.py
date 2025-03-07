@@ -3,12 +3,13 @@ from sqlalchemy.orm import Session
 
 from backend.app.database.models import Restaurant
 from backend.app.database.session import get_db
-from backend.app.schemas.restaurant import RestaurantCreate, RestaurantBase
+from backend.app.schemas.restaurant import RestaurantCreate, RestaurantBase, \
+    RestaurantSchema
 
 router = APIRouter()
 
 
-@router.post("/", response_model=RestaurantCreate)
+@router.post("/", response_model=RestaurantSchema)
 def create_restaurant(restaurant: RestaurantCreate, db: Session = Depends(get_db)):
     """Creates a new restaurant with the given name"""
 
