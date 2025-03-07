@@ -7,6 +7,8 @@ services:
       - .env
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - fastapi_network
 
@@ -15,8 +17,6 @@ services:
     build: .
     container_name: backend_fastapi
     command: ["/entrypoint.sh"]
-    environment:
-      - WATCHFILES_FORCE_POLLING=true
     env_file:
       - .env
     depends_on:
@@ -26,17 +26,9 @@ services:
     networks:
       - fastapi_network
 
-  migrator:
-    build: .
-    container_name: alembic_migrator
-    command: /migration_script.sh
-    depends_on:
-      - db
-    env_file:
-      - .env
-    networks:
-      - fastapi_network
-
 networks:
   fastapi_network:
     driver: bridge
+
+volumes:
+  postgres_data:
