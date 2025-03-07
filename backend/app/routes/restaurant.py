@@ -3,8 +3,11 @@ from sqlalchemy.orm import Session
 
 from backend.app.database.models import Restaurant
 from backend.app.database.session import get_db
-from backend.app.schemas.restaurant import RestaurantCreate, RestaurantBase, \
-    RestaurantSchema
+from backend.app.schemas.restaurant import (
+    RestaurantCreate,
+    RestaurantBase,
+    RestaurantSchema,
+)
 
 router = APIRouter()
 
