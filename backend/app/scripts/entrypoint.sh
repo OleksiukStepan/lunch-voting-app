@@ -7,7 +7,6 @@ until nc -z "$POSTGRES_HOST" "$POSTGRES_DB_PORT"; do
 done
 echo "PostgreSQL is up - running migrations..."
 
-alembic revision --autogenerate -m "Initial migration"
 alembic upgrade head
 
 echo "Migrations applied. Starting server..."
