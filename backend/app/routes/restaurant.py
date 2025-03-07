@@ -10,6 +10,8 @@ router = APIRouter()
 
 @router.post("/", response_model=RestaurantCreate)
 def create_restaurant(restaurant: RestaurantCreate, db: Session = Depends(get_db)):
+    """Creates a new restaurant with the given name"""
+
     new_restaurant = Restaurant(name=restaurant.name)
     db.add(new_restaurant)
     db.commit()
@@ -20,4 +22,6 @@ def create_restaurant(restaurant: RestaurantCreate, db: Session = Depends(get_db
 
 @router.get("/", response_model=list[RestaurantBase])
 def get_all_restaurants(db: Session = Depends(get_db)):
+    """Retrieves a list of all registered restaurants"""
+
     return db.query(Restaurant).all()

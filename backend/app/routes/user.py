@@ -10,6 +10,8 @@ router = APIRouter()
 
 @router.post("/", response_model=UserCreate)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    """Creates a new user with the provided details"""
+
     new_user = User(**user.model_dump())
     db.add(new_user)
     db.commit()
@@ -19,4 +21,6 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=list[UserSchema])
 def get_all_users(db: Session = Depends(get_db)):
+    """Retrieves a list of all registered users"""
+
     return db.query(User).all()

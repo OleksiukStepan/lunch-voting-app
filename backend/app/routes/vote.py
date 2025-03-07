@@ -14,6 +14,8 @@ router = APIRouter()
 
 @router.get("/", response_model=list[VoteSchema])
 def get_today_votes(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Retrieves all votes cast for today's menus"""
+
     votes = db.query(Vote).filter(Vote.created_at == date.today()).all()
 
     for vote in votes:
@@ -24,6 +26,8 @@ def get_today_votes(current_user: User = Depends(get_current_user), db: Session 
 
 @router.post("/", response_model=VoteCreate)
 def vote_for_menu(vote_data: VoteCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Allows a user to vote for a menu item. Each user can vote only once per day"""
+
     vote = db.query(Vote).filter(
         Vote.user_id == vote_data.user_id, Vote.menu_id == vote_data.menu_id
     ).first()
@@ -41,6 +45,8 @@ def vote_for_menu(vote_data: VoteCreate, current_user: User = Depends(get_curren
 
 @router.get("/results/", response_model=list[list])
 def get_voting_results(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Retrieves the vote count for each menu item for today"""
+
     results = (
         db.query(Menu.dish, func.count(Vote.id))
         .join(Vote, Menu.id == Vote.menu_id)

@@ -12,6 +12,8 @@ router = APIRouter()
 
 @router.post("/", response_model=MenuCreate)
 def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
+    """Creates a new menu for a restaurant"""
+
     new_menu = Menu(**menu.model_dump())
     db.add(new_menu)
     db.commit()
@@ -22,11 +24,15 @@ def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=list[MenuSchema])
 def get_all_menus(db: Session = Depends(get_db)):
+    """Retrieves all menus available in the system"""
+
     return db.query(Menu).all()
 
 
 @router.get("/today/", response_model=list[MenuSchema])
 def get_today_menu(db: Session = Depends(get_db)):
+    """Fetches the menu for the current day"""
+
     menu = db.query(Menu).filter(Menu.date == date.today())
 
     if not menu:
